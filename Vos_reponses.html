@@ -1200,6 +1200,58 @@ function changerFiltreQuestion() {
 <div id="totauxParParticipant" style="font-weight: bold; margin-top: 15px;"><strong>Totaux par participant :</strong><br>Je M'appelle Teuse : 40 point(s)<br>Hugo : 35 point(s)<br></div>
 
 <div id="filteredResults"></div>
+<label for="playerFilter">Filtrer par joueur :</label>
+<select id="playerFilter" onchange="filterByPlayer()">
+  <option value="all">Tous</option>
+</select>
+
+<div id="filteredResults">
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Participant</th>
+        <th>Question</th>
+        <th>Réponse donnée</th>
+        <th>Bonne réponse</th>
+        <th>Correcte</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody id="responseBody">
+      <!-- ton contenu existant -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Récupère toutes les lignes du tableau
+  const rows = document.querySelectorAll("#responseBody tr");
+  const playerSelect = document.getElementById("playerFilter");
+
+  // Extraire les noms uniques des joueurs
+  const players = [...new Set(Array.from(rows).map(row => row.cells[0].innerText))];
+
+  // Ajouter les joueurs dans la liste déroulante
+  players.forEach(player => {
+    const option = document.createElement("option");
+    option.value = player;
+    option.textContent = player;
+    playerSelect.appendChild(option);
+  });
+
+  // Fonction de filtrage
+  function filterByPlayer() {
+    const selected = playerSelect.value;
+    rows.forEach(row => {
+      const player = row.cells[0].innerText;
+      if (selected === "all" || player === selected) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+</script>
 
 <script>
 function showAllResponses() {
