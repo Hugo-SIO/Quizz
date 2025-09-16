@@ -1,0 +1,31 @@
+name: Generate Index
+
+on:
+  push:
+    branches:
+      - main  # branche à surveiller
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install --upgrade pip
+
+      - name: Generate index.html
+        run: python generate_index.py
+
+      - name: Commit and push index
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add index.html
+          git commit -m "Update index.html [skip ci]" || echo "No changes to commit"
+          git push
